@@ -2,10 +2,20 @@
 - name: Deploy Static Web App to Target Environment
   hosts: "{{ target_env }}"
   become: yes
+  gather_facts: no
   vars:
     target_env: "dev"
     build_number: "1"
     app_version: "v1.0.0"
+
+  pre_tasks:
+    - name: Wait for SSH daemon to finish booting on EC2 instance
+      wait_for_connection:
+        delay: 5
+        timeout: 90
+
+    - name: Gather system facts once SSH is ready
+      setup:
 
   roles:
     - docker
