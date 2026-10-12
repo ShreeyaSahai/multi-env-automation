@@ -1,0 +1,12 @@
+---
+- name: Deploy Static Web App to Target Environment
+  hosts: "{{ target_env }}"
+  become: yes
+  vars:
+    target_env: "dev"
+    build_number: "1"
+    app_version: "v1.0.0"
+
+  roles:
+    - docker
+    - app

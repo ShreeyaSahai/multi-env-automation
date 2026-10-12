@@ -1,0 +1,38 @@
+---
+- name: Create remote application build directory
+  file:
+    path: /opt/static-app
+    state: directory
+    mode: '0755'
+
+- name: Copy Dockerfile and nginx.conf to server
+  copy:
+    src: "{{ playbook_dir }}/../app/{{ item }}"
+    dest: "/opt/static-app/{{ item }}"
+    mode: '0644'
+  loop:
+    - Dockerfile
+    - nginx.conf
+
+- name: Render dynamic index.html via Jinja2 template
+  template:
+    src: index.html.j2
+    dest: /opt/static-app/index.html
+    mode: '0644'
+
+- name: Build Docker image with current build tag
+  command: "docker build -t static-web-app:{{ build_number }} /opt/static-app"
+  changed_when: true
+
+- name: Stop and remove existing web-app container if running
+  shell: "docker rm -f web-app || true"
+  changed_when: true
+
+- name: Run new web-app container on port 80
+  command: >
+    docker run -d
+    --name web-app
+    --restart always
+    -p 80:80
+    static-web-app:{{ build_number }}
+  changed_when: true
