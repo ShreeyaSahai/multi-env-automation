@@ -1,0 +1,22 @@
+FROM jenkins/jenkins:lts-jdk17
+
+USER root
+
+# Install curl, unzip, python3, ansible, and docker.io CLI
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    python3 \
+    python3-pip \
+    ansible \
+    docker.io \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Terraform CLI
+RUN curl -fsSL https://releases.hashicorp.com/terraform/1.9.8/terraform_1.9.8_linux_amd64.zip -o terraform.zip \
+    && unzip terraform.zip \
+    && mv terraform /usr/local/bin/terraform \
+    && chmod +x /usr/local/bin/terraform \
+    && rm terraform.zip
+
+# Run Jenkins as root inside container so it can access mounted docker.sock and WSL files cleanly
