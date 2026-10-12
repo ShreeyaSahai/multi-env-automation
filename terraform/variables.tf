@@ -18,11 +18,11 @@ variable "environments" {
   }))
   default = {
     dev = {
-      instance_type = "t2.micro"
+      instance_type = "t3.micro"
       banner_color  = "amber"
     }
     prod = {
-      instance_type = "t2.micro"
+      instance_type = "t3.micro"
       banner_color  = "emerald"
     }
   }
