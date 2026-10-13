@@ -5,7 +5,7 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
         AWS_DEFAULT_REGION    = 'us-east-1'
-        APP_VERSION           = 'v1.0.0'
+        APP_VERSION           = 'v2.0.0'
     }
 
     stages {
